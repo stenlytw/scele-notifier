@@ -10,12 +10,13 @@ use Mojo::DOM;
 use WWW::Mechanize;
 
 #~ Config
-my $USERNAME = 'USERNAME'; 
-my $PASSWORD = 'PASSWORD';
-my @COURSES = (177, 189, 172);
+my %_ENV = loadEnv();
+my $USERNAME = $_ENV{USERNAME}; 
+my $PASSWORD = $_ENV{PASSWORD}; 
+my @COURSES = split /\s*,\s*/, $_ENV{COURSES};
 my %EMAIL = (
-    to  => 'abc@gmail.com',
-    from => 'abc@abc.com',
+    to  => $_ENV{EMAIL_TO},
+    from => $_ENV{EMAIL_FROM},
 );
 
 #~ START
@@ -103,4 +104,18 @@ sub processHome {
 	}
 	
 	return $content;
+}
+
+sub loadEnv {
+	my %ENV;
+	
+	open(FILE, "<.env") or die $!;
+	while(<FILE>) {
+		chomp;
+		my ($key, $val) = split /\s*=\s*/; 
+		$ENV{$key} = $val;
+	}
+	close FILE;
+	
+	return %ENV;
 }

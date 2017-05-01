@@ -18,3 +18,5 @@ nytprof.out
 *.o
 *.bs
 /_eumm/
+.env
+last_topic_id.txt
